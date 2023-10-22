@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Menu {
@@ -20,12 +21,15 @@ public class Menu {
         return description;
     }
 
+    public void addProducts(Product...products) {
+        this.products.addAll(Arrays.asList(products));
+    }
+
     public List<Product> getProducts() {
         return products;
     }
 
-    public void printMenu() {
-        System.out.printf("%-8s | %-30s\n",
-                name, description);
+    public String printMenu() {
+        return name + " - "  + description;
     }
 }

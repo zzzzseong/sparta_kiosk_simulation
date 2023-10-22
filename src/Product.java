@@ -1,6 +1,5 @@
 public class Product extends Menu {
-
-    private float price;
+    private final float price;
 
     public Product(String name, float price, String description) {
         super(name, description);
@@ -8,8 +7,11 @@ public class Product extends Menu {
     }
 
     @Override
-    public void printMenu() {
-        System.out.printf("%-15s | W %-4s | %-30s\n",
-                super.getName(), String.format("%.1f", price), super.getDescription());
+    public String printMenu() {
+        return super.getName() + " (W " + price + ")" + " - "  + super.getDescription();
+    }
+
+    public float getPrice() {
+        return price;
     }
 }
