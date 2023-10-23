@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class Kiosk {
@@ -19,6 +20,7 @@ public class Kiosk {
                 case "1", "2", "3", "4" -> productScreen(Integer.parseInt(select)-1);
                 case "5" -> orderScreen();
                 case "6" -> cancelScreen();
+                case "0" -> hiddenScreen();
                 default -> System.out.println("!!!올바른 값을 입력해주세요!!!");
             }
         }
@@ -87,20 +89,21 @@ public class Kiosk {
             System.out.println("아래와 같이 주문 하시겠습니까?\n");
 
             System.out.println("[ Orders ]");
-            for (Menu menu : order.getCart()) {
-                Product product = (Product) menu;
-                System.out.println(product.printMenu());
+            for (CartData cartData : order.getCart()) {
+                Product product = cartData.getProduct();
+                System.out.println(product.printMenu() + " " +cartData.getCount() + "개");
             }
             System.out.println("\n[ Total ]");
-            System.out.println("W " + order.getTotalPrice() + "\n");
+            System.out.println("W " + order.getCartPrice() + "\n");
             System.out.println("1. 주문   2. 메뉴판");
             System.out.print("입력: ");
 
             switch (scanner.nextLine()) {
                 case "1" -> {
                     order.addOrder();
+
                     System.out.println("주문이 완료되었습니다!\n");
-                    System.out.println("대기번호는 [ " + order.getOrder().size() + " ] 번입니다.");
+                    System.out.println("대기번호는 [ " + order.getOrderNumber() + " ] 번입니다.");
                     System.out.println("(3초 후 메뉴판으로 돌아갑니다.)");
                     Thread.sleep(3000);
                     run = false;
@@ -132,6 +135,30 @@ public class Kiosk {
                     run = false;
                 }
                 case "2" -> run = false;
+                default -> System.out.println("!!!올바른 값을 입력해주세요!!!");
+            }
+        }
+    }
+
+    public void hiddenScreen() {
+        boolean run = true;
+        while(run) {
+            System.out.println("========================================================================");
+            System.out.println("[ 총 판매금액 현황 ]");
+            System.out.println("현재까지 총 판매된 금액은 [ W " + order.getTotalPrice() + " ] 입니다.\n");
+
+            System.out.println("[ 총 판매상품 목록 현황 ]");
+            System.out.println("현재까지 총 판매된 상품 목록은 아래와 같습니다.");
+            Queue<OrderData> orders = order.getOrder();
+            for (OrderData orderData : orders) {
+                System.out.println("- " + orderData.getProductName() + "(W " + orderData.getPrice() + ")");
+            }
+
+            System.out.println("1. 돌아가기");
+            System.out.print("입력: ");
+
+            switch (scanner.nextLine()) {
+                case "1" -> run = false;
                 default -> System.out.println("!!!올바른 값을 입력해주세요!!!");
             }
         }
